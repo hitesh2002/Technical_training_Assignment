@@ -1,0 +1,93 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class HotelManagementSystem extends JFrame implements ActionListener {
+    // GUI components
+    private JButton addButton, checkButton, bookButton;
+    private JTextField roomNumberField, checkRoomField, bookRoomField;
+    private JTextArea displayArea;
+
+    // Hotel rooms data
+    private boolean[] roomsAvailability;
+
+    public HotelManagementSystem() {
+        super("Hotel Management System");
+
+        // Initialize rooms data
+        roomsAvailability = new boolean[100]; // Assuming 100 rooms in the hotel
+
+        // Initialize GUI components
+        addButton = new JButton("Add Room");
+        checkButton = new JButton("Check Availability");
+        bookButton = new JButton("Book Room");
+        roomNumberField = new JTextField(10);
+        checkRoomField = new JTextField(10);
+        bookRoomField = new JTextField(10);
+        displayArea = new JTextArea(15, 30);
+
+        // Set layout
+        setLayout(new FlowLayout());
+
+        // Add components to the frame
+        add(new JLabel("Room Number:"));
+        add(roomNumberField);
+        add(addButton);
+        add(new JLabel("Check Room Availability:"));
+        add(checkRoomField);
+        add(checkButton);
+        add(new JLabel("Book Room:"));
+        add(bookRoomField);
+        add(bookButton);
+        add(new JScrollPane(displayArea));
+
+        // Set action listeners
+        addButton.addActionListener(this);
+        checkButton.addActionListener(this);
+        bookButton.addActionListener(this);
+
+        // Set frame properties
+        setSize(400, 400);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addButton) {
+            int roomNumber = Integer.parseInt(roomNumberField.getText());
+            if (roomNumber >= 0 && roomNumber < 100) {
+                roomsAvailability[roomNumber] = true;
+                displayArea.append("Room " + roomNumber + " added.\n");
+            } else {
+                displayArea.append("Invalid room number. Please enter a number between 0 and 99.\n");
+            }
+        } else if (e.getSource() == checkButton) {
+            int roomNumber = Integer.parseInt(checkRoomField.getText());
+            if (roomNumber >= 0 && roomNumber < 100) {
+                if (roomsAvailability[roomNumber]) {
+                    displayArea.append("Room " + roomNumber + " is available.\n");
+                } else {
+                    displayArea.append("Room " + roomNumber + " is not available.\n");
+                }
+            } else {
+                displayArea.append("Invalid room number. Please enter a number between 0 and 99.\n");
+            }
+        } else if (e.getSource() == bookButton) {
+            int roomNumber = Integer.parseInt(bookRoomField.getText());
+            if (roomNumber >= 0 && roomNumber < 100) {
+                if (roomsAvailability[roomNumber]) {
+                    roomsAvailability[roomNumber] = false;
+                    displayArea.append("Room " + roomNumber + " booked.\n");
+                } else {
+                    displayArea.append("Room " + roomNumber + " is already booked.\n");
+                }
+            } else {
+                displayArea.append("Invalid room number. Please enter a number between 0 and 99.\n");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new HotelManagementSystem();
+    }
+}
